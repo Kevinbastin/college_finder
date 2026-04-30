@@ -2,12 +2,12 @@
 
 A full-stack college discovery and comparison platform for Indian students. Search, compare, predict admission chances, and save your favorite colleges across 60+ institutions in India.
 
-## 🎯 Live Application
+## Live Application
 
 **Frontend**: https://college-finder-henna.vercel.app  
 **Backend API**: https://college-finder-z9dq.onrender.com
 
-## 🛠 Tech Stack
+## Tech Stack
 
 **Frontend**
 - Next.js 16 (App Router) with TypeScript
@@ -29,7 +29,7 @@ A full-stack college discovery and comparison platform for Indian students. Sear
 - Backend: Render (free tier with cold start spindown)
 - Database: Neon Postgres
 
-## ✨ Features
+## Features
 
 ### 1. Smart College Discovery
 - Browse 60+ colleges with live debounced search
@@ -69,7 +69,7 @@ A full-stack college discovery and comparison platform for Indian students. Sear
 - Expandable answer threads
 - Real-time updates with optimistic UI
 
-## 📦 Local Development
+## Local Development
 
 ### Prerequisites
 - Node.js 18+
@@ -110,7 +110,7 @@ npm run dev
 
 Open http://localhost:3000 to test locally.
 
-## 🔑 Environment Variables
+## Environment Variables
 
 ### Development (`.env.local`)
 ```
@@ -135,7 +135,7 @@ NEXTAUTH_URL=https://college-finder-henna.vercel.app
 NODE_ENV=production
 ```
 
-## 🚀 Deployment
+## Deployment
 
 ### Architecture
 - **Frontend** runs on Vercel (build + deployment)
@@ -183,7 +183,7 @@ Expected response: `{"success":true,"message":"Seeded 60 colleges!"}`
 #### 4. Enable API Proxy (optional but recommended)
 Vercel automatically rewrites `/api/*` to Render (via `vercel.json`). No additional config needed.
 
-## 📊 Database Schema
+## Database Schema
 
 ### Tables
 - **College**: 60 institutions with full metadata (fees, placements, rankings)
@@ -200,7 +200,7 @@ Vercel automatically rewrites `/api/*` to Render (via `vercel.json`). No additio
 
 ---
 
-## 🧪 Testing Features
+## Testing Features
 
 ```bash
 # Test locally
@@ -218,20 +218,20 @@ npm run dev
 
 ---
 
-## 📖 Documentation
+## Documentation
 
 - [Deployment Guide](./DEPLOY_RENDER.md) — Detailed Render + Vercel setup
 - API Routes documented in `src/app/api/`
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Feel free to fork, modify, and use this as a template for your college discovery projects.
 
 ---
 
-## ⚡ Performance Notes
+## Performance Notes
 
 - **Cold starts**: Render free tier spins down after 15 min inactivity (first request ~30s). Upgrade to Starter ($7/mo) for always-on.
 - **Neon free tier**: Suitable for small projects. Upgrade if you exceed limits.
@@ -239,4 +239,4 @@ Feel free to fork, modify, and use this as a template for your college discovery
 
 ---
 
-Built with ❤️ for students across India making informed college choices.
+Built for students across India making informed college choices.
