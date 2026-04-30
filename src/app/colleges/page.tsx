@@ -64,8 +64,8 @@ function CollegesContent() {
     params.set('sort', filters.sort);
 
     try {
-      const res = await fetch(`/api/colleges?${params.toString()}`);
-      const data = await res.json();
+      const api = await import('@/lib/api');
+      const data = await api.apiJson(`/api/colleges?${params.toString()}`);
       setColleges(data.colleges || []);
       setTotal(data.total || 0);
       setTotalPages(data.totalPages || 0);
@@ -76,17 +76,25 @@ function CollegesContent() {
   useEffect(() => { fetchColleges(); }, [fetchColleges]);
 
   useEffect(() => {
-    fetch('/api/colleges?page=1&sort=name').then(r => r.json()).then(d => {
-      const uniqueStates = [...new Set((d.colleges || []).map((c: College) => c.state))].sort() as string[];
-      setStates(uniqueStates);
-    });
+    (async () => {
+      try {
+        const api = await import('@/lib/api');
+        const d = await api.apiJson('/api/colleges?page=1&sort=name');
+        const uniqueStates = [...new Set((d.colleges || []).map((c: College) => c.state))].sort() as string[];
+        setStates(uniqueStates);
+      } catch {}
+    })();
   }, []);
 
   useEffect(() => {
     if (session) {
-      fetch('/api/saved').then(r => r.json()).then(d => {
-        setSavedIds((d.saved || []).map((c: College) => c.id));
-      }).catch(() => {});
+      (async () => {
+        try {
+          const api = await import('@/lib/api');
+          const d = await api.apiJson('/api/saved');
+          setSavedIds((d.saved || []).map((c: College) => c.id));
+        } catch {}
+      })();
     }
   }, [session]);
 

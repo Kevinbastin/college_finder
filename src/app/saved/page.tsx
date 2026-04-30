@@ -20,14 +20,18 @@ export default function SavedPage() {
   useEffect(() => {
     if (status === 'unauthenticated') { router.push('/login?callbackUrl=/saved'); return; }
     if (status === 'authenticated') {
-      Promise.all([
-        fetch('/api/saved').then(r => r.json()),
-        fetch('/api/comparisons').then(r => r.json()),
-      ]).then(([savedData, comparisonData]) => {
-        setSaved(savedData.saved || []);
-        setComparisons(comparisonData.comparisons || []);
-        setLoading(false);
-      }).catch(() => setLoading(false));
+      (async () => {
+        try {
+          const api = await import('@/lib/api');
+          const [savedData, comparisonData] = await Promise.all([
+            api.apiJson('/api/saved'),
+            api.apiJson('/api/comparisons'),
+          ]);
+          setSaved(savedData.saved || []);
+          setComparisons(comparisonData.comparisons || []);
+        } catch {
+        } finally { setLoading(false); }
+      })();
     }
   }, [status, router]);
 

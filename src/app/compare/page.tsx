@@ -57,7 +57,8 @@ export default function ComparePage() {
 
     setSaving(true);
     try {
-      const res = await fetch('/api/comparisons', {
+      const api = await import('@/lib/api');
+      const res = await api.apiFetch('/api/comparisons', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ collegeIds: compareList.map(c => c.id) }),

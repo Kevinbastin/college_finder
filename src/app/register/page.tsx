@@ -31,7 +31,8 @@ export default function RegisterPage() {
     setLoading(true);
     setServerError('');
     try {
-      const res = await fetch('/api/auth/register', {
+      const api = await import('@/lib/api');
+      const res = await api.apiFetch('/api/auth/register', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password }),
       });

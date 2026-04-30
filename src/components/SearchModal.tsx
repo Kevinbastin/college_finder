@@ -22,8 +22,8 @@ export default function SearchModal({ isOpen, onClose, onSelect }: Props) {
     const t = setTimeout(async () => {
       setLoading(true);
       try {
-        const res = await fetch(`/api/colleges?search=${encodeURIComponent(value)}&page=1`);
-        const data = await res.json();
+        const api = await import('@/lib/api');
+        const data = await api.apiJson(`/api/colleges?search=${encodeURIComponent(value)}&page=1`);
         setResults(data.colleges || []);
       } catch { setResults([]); }
       setLoading(false);

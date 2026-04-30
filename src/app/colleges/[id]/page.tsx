@@ -26,21 +26,29 @@ export default function CollegeDetailPage({ params }: { params: Promise<{ id: st
   const [answers, setAnswers] = useState<Record<string, any[]>>({});
 
   useEffect(() => {
-    Promise.all([
-      fetch(`/api/colleges/${id}`).then(r => r.json()),
-      fetch(`/api/colleges/similar/${id}`).then(r => r.json()),
-      fetch(`/api/questions/${id}`).then(r => r.json()),
-    ]).then(([colData, simData, qData]) => {
-      setCollege(colData.college);
-      setSimilar(simData.colleges || []);
-      setQuestions(qData.questions || []);
-      setLoading(false);
-    }).catch(() => setLoading(false));
+    (async () => {
+      try {
+        const api = await import('@/lib/api');
+        const [colData, simData, qData] = await Promise.all([
+          api.apiJson(`/api/colleges/${id}`),
+          api.apiJson(`/api/colleges/similar/${id}`),
+          api.apiJson(`/api/questions/${id}`),
+        ]);
+        setCollege(colData.college);
+        setSimilar(simData.colleges || []);
+        setQuestions(qData.questions || []);
+      } catch {
+      } finally { setLoading(false); }
+    })();
 
     if (session) {
-      fetch('/api/saved').then(r => r.json()).then(d => {
-        setIsSaved((d.saved || []).some((c: College) => c.id === id));
-      });
+      (async () => {
+        try {
+          const api = await import('@/lib/api');
+          const d = await api.apiJson('/api/saved');
+          setIsSaved((d.saved || []).some((c: College) => c.id === id));
+        } catch {}
+      })();
     }
   }, [id, session]);
 
@@ -57,7 +65,8 @@ export default function CollegeDetailPage({ params }: { params: Promise<{ id: st
   const handleAskQuestion = async () => {
     if (!newQuestion.trim() || newQuestion.length < 10) { toast.error('Question must be at least 10 characters'); return; }
     try {
-      const res = await fetch('/api/questions', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ collegeId: id, text: newQuestion }) });
+      const api = await import('@/lib/api');
+      const res = await api.apiFetch('/api/questions', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ collegeId: id, text: newQuestion }) });
       const data = await res.json();
       if (res.ok) { setQuestions(prev => [data.question, ...prev]); setNewQuestion(''); toast.success('Question submitted!'); }
     } catch { toast.error('Failed to post question'); }
@@ -67,7 +76,8 @@ export default function CollegeDetailPage({ params }: { params: Promise<{ id: st
     const text = answerTexts[questionId];
     if (!text || text.length < 5) { toast.error('Answer must be at least 5 characters'); return; }
     try {
-      const res = await fetch('/api/answers', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ questionId, text }) });
+      const api = await import('@/lib/api');
+      const res = await api.apiFetch('/api/answers', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ questionId, text }) });
       if (res.ok) {
         const data = await res.json();
         setAnswers(prev => ({ ...prev, [questionId]: [data.answer, ...(prev[questionId] || [])] }));
@@ -81,8 +91,8 @@ export default function CollegeDetailPage({ params }: { params: Promise<{ id: st
     if (expandedQ === questionId) { setExpandedQ(null); return; }
     setExpandedQ(questionId);
     if (!answers[questionId]) {
-      const res = await fetch(`/api/answers/${questionId}`);
-      const data = await res.json();
+      const api = await import('@/lib/api');
+      const data = await api.apiJson(`/api/answers/${questionId}`);
       setAnswers(prev => ({ ...prev, [questionId]: data.answers || [] }));
     }
   };

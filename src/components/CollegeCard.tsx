@@ -34,10 +34,10 @@ export default function CollegeCard({ college, savedIds = [], onToggleSave, show
 
     try {
       if (wasSaved) {
-        await fetch(`/api/saved/${college.id}`, { method: 'DELETE' });
+        await (await import('@/lib/api')).apiFetch(`/api/saved/${college.id}`, { method: 'DELETE' });
         toast.success('Removed from saved');
       } else {
-        await fetch('/api/saved', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ collegeId: college.id }) });
+        await (await import('@/lib/api')).apiFetch('/api/saved', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ collegeId: college.id }) });
         toast.success('Saved to your list', { icon: '✓' });
       }
       onToggleSave?.(college.id, !wasSaved);

@@ -26,7 +26,14 @@ export default function HomePage() {
   const router = useRouter();
 
   useEffect(() => {
-    fetch('/api/colleges/featured').then(r => r.json()).then(d => { setFeatured(d.colleges || []); setLoading(false); }).catch(() => setLoading(false));
+    (async () => {
+      try {
+        const api = await import('@/lib/api');
+        const d = await api.apiJson('/api/colleges/featured');
+        setFeatured(d.colleges || []);
+      } catch {}
+      setLoading(false);
+    })();
   }, []);
 
   const handleSearch = (e: React.FormEvent) => {

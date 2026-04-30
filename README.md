@@ -71,6 +71,15 @@ Copy [.env.example](.env.example) to `.env` for local development.
 5. Run `prisma migrate deploy` against the production database
 6. Seed the production database if needed with `npx prisma db seed`
 7. Deploy — Vercel auto-builds on push
+ - Create a Neon database at [neon.tech](https://neon.tech)
+ - Import the frontend project on [vercel.com](https://vercel.com)
+ - If you host the backend separately (recommended):
+	 - Deploy the backend on Render using the included `render.yaml` (backend will run migrations during build)
+	 - Set `NEXT_PUBLIC_API_URL` in the Vercel frontend environment to the Render service URL (e.g. `https://college-finder-backend.onrender.com`)
+ - Add `DATABASE_URL`, `NEXTAUTH_SECRET`, and `NEXTAUTH_URL` (for dev) in the respective platform environment settings
+ - Run `prisma migrate deploy` against the production database (the Render build does this automatically when using `render.yaml`)
+ - Seed the production database if needed with `npx prisma db seed` or call the `/api/seed` endpoint
+ - Deploy — Vercel/Render auto-build on push
 
 ## 📊 Database
 
