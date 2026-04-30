@@ -79,36 +79,23 @@ A full-stack college discovery and comparison platform for Indian students. Sear
 ### Setup
 
 ```bash
-# Clone the repository
 git clone https://github.com/Kevinbastin/college_finder.git
 cd college_discovery
 
-# Install dependencies
 npm install
 
-# Create local environment file
 cp .env.example .env.local
 
-# Edit .env.local with your local DB credentials
-# Example for local Postgres:
-# DATABASE_URL="postgresql://user:password@localhost:5432/college_finder"
-# NEXTAUTH_SECRET="your-random-secret-here"
-# NEXTAUTH_URL="http://localhost:3000"
-
-# Generate Prisma client
 npx prisma generate
 
-# Run migrations locally
 npx prisma migrate dev
 
-# Seed database with 60 colleges
 npx prisma db seed
 
-# Start dev server
 npm run dev
 ```
 
-Open http://localhost:3000 to test locally.
+Open http://localhost:3000 after the development server starts.
 
 ## Environment Variables
 
@@ -203,17 +190,7 @@ Vercel automatically rewrites `/api/*` to Render (via `vercel.json`). No additio
 ## Testing Features
 
 ```bash
-# Test locally
 npm run dev
-
-# Login credentials (use the register page to create an account)
-# After registration, you can:
-# - Browse /colleges
-# - Click a college to view details
-# - Save colleges to your list
-# - Compare colleges
-# - Ask/answer questions
-# - Use the predictor
 ```
 
 ---
@@ -239,4 +216,4 @@ Feel free to fork, modify, and use this as a template for your college discovery
 
 ---
 
-Built for students across India making informed college choices.
+This project provides a structured way to compare colleges, evaluate admission options, and manage saved selections.
