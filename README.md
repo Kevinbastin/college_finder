@@ -1,48 +1,104 @@
-# CollegeFind — College Discovery Platform
+# CollegeFind — College Discovery & Decision Platform
 
-A production-grade college discovery and decision platform for Indian students. Search, compare, and make informed decisions about 60+ colleges across India.
+A full-stack college discovery and comparison platform for Indian students. Search, compare, predict admission chances, and save your favorite colleges across 60+ institutions in India.
 
-## 🚀 Live URL
+## 🎯 Live Application
 
-> **[https://your-deployment.vercel.app](https://your-deployment.vercel.app)** *(Update after deployment)*
+**Frontend**: https://college-finder-henna.vercel.app  
+**Backend API**: https://college-finder-z9dq.onrender.com
 
 ## 🛠 Tech Stack
 
-- **Frontend & Backend**: Next.js 16 (App Router) · TypeScript
-- **Styling**: Tailwind CSS v3
-- **Database**: PostgreSQL (Neon — serverless)
-- **ORM**: Prisma
-- **Authentication**: NextAuth.js (Credentials Provider)
-- **Deployment**: Vercel
-- **Notifications**: react-hot-toast
+**Frontend**
+- Next.js 16 (App Router) with TypeScript
+- Tailwind CSS v3 for styling
+- NextAuth.js for authentication (Credentials Provider)
+- React Hot Toast for notifications
+
+**Backend**
+- Next.js API routes (serverless)
+- Prisma ORM with PostgreSQL
+- NextAuth integration
+
+**Database**
+- Neon PostgreSQL (serverless)
+- 60 pre-seeded colleges with realistic data
+
+**Deployment**
+- Frontend: Vercel (with API proxy to backend)
+- Backend: Render (free tier with cold start spindown)
+- Database: Neon Postgres
 
 ## ✨ Features
 
-1. **College Listing + Search + Filter** — Browse 60 colleges with live debounced search, combinable filters (state, type, fees, NAAC, rating, courses), URL-based state, pagination, skeleton loaders
-2. **College Detail Page** — Full information with tabs (Overview, Courses, Placements, Contact), quick stats bar, similar colleges, breadcrumbs
-3. **Compare Colleges** — Side-by-side comparison of 2-3 colleges with best-value green highlighting, floating compare bar, search modal
-4. **Auth + Saved Colleges** — Email/password login/register with NextAuth, bookmark colleges, save comparison sets, protected saved page, optimistic updates
-5. **College Predictor** — Enter exam (JEE Main/Advanced, NEET, CAT, GATE) and rank to find matching colleges with High/Moderate/Low chance badges
-6. **Q&A Discussion** — Per-college Q&A on detail pages, auth-gated posting, expandable answers
+### 1. Smart College Discovery
+- Browse 60+ colleges with live debounced search
+- Filter by state, college type, fees range, NAAC grade, rating, and courses
+- URL-based state management for shareable links
+- Pagination with skeleton loaders for fast perceived performance
 
-## 📦 Getting Started
+### 2. Detailed College Profiles
+- Four-tab interface: Overview, Courses, Placements, Contact
+- Quick stats bar (fees, placement %, avg/highest package, student count)
+- Top recruiters and course offerings
+- Similar colleges recommendation engine
+- Breadcrumb navigation
+
+### 3. College Comparison
+- Compare 2–3 colleges side-by-side
+- 11+ metrics: location, fees, placements, ratings, establishment year
+- Best-value highlighting for standout metrics
+- Persistent floating compare bar
+- Smart search modal for adding colleges
+
+### 4. Authentication & Saved Items
+- Secure email/password registration and login
+- Session persistence with NextAuth
+- Bookmark individual colleges to personal "Saved Colleges" list
+- Save and reuse multi-college comparisons
+- Protected pages (requires login)
+
+### 5. Admission Predictor
+- Enter exam type (JEE Main/Advanced, NEET, CAT, GATE) and rank
+- Instant chance prediction: High/Moderate/Low badges
+- Filtered college recommendations based on cutoff data
+
+### 6. Community Q&A
+- Ask questions on any college detail page
+- Answer community questions (authenticated users)
+- Expandable answer threads
+- Real-time updates with optimistic UI
+
+## 📦 Local Development
+
+### Prerequisites
+- Node.js 18+
+- npm/yarn
+- PostgreSQL (or Docker)
+
+### Setup
 
 ```bash
-# Clone the repo
-git clone https://github.com/yourusername/college-discovery.git
-cd college-discovery
+# Clone the repository
+git clone https://github.com/Kevinbastin/college_finder.git
+cd college_discovery
 
 # Install dependencies
 npm install
 
-# Set up environment variables
-cp .env.example .env
-# Edit .env with your values
+# Create local environment file
+cp .env.example .env.local
+
+# Edit .env.local with your local DB credentials
+# Example for local Postgres:
+# DATABASE_URL="postgresql://user:password@localhost:5432/college_finder"
+# NEXTAUTH_SECRET="your-random-secret-here"
+# NEXTAUTH_URL="http://localhost:3000"
 
 # Generate Prisma client
 npx prisma generate
 
-# Run migrations
+# Run migrations locally
 npx prisma migrate dev
 
 # Seed database with 60 colleges
@@ -52,41 +108,135 @@ npx prisma db seed
 npm run dev
 ```
 
+Open http://localhost:3000 to test locally.
+
 ## 🔑 Environment Variables
 
-| Variable | Description |
-|----------|-------------|
-| `DATABASE_URL` | Neon PostgreSQL connection string |
-| `NEXTAUTH_SECRET` | Random secret for NextAuth sessions |
-| `NEXTAUTH_URL` | Your app URL (http://localhost:3000 for dev) |
+### Development (`.env.local`)
+```
+DATABASE_URL=postgresql://user:password@localhost:5432/college_finder
+NEXTAUTH_SECRET=<random-32-char-string>
+NEXTAUTH_URL=http://localhost:3000
+```
 
-Copy [.env.example](.env.example) to `.env` for local development.
+### Production (Vercel)
+```
+NEXTAUTH_URL=https://college-finder-henna.vercel.app
+NEXTAUTH_SECRET=<same-as-render>
+```
+
+**Note**: Do not set `NEXT_PUBLIC_API_URL` in production; the Vercel rewrite handles API proxying to Render.
+
+### Production (Render Backend)
+```
+DATABASE_URL=<your-neon-connection-string>
+NEXTAUTH_SECRET=<same-as-vercel>
+NEXTAUTH_URL=https://college-finder-henna.vercel.app
+NODE_ENV=production
+```
 
 ## 🚀 Deployment
 
+### Architecture
+- **Frontend** runs on Vercel (build + deployment)
+- **Backend** runs on Render (Next.js app with API routes)
+- **Database** runs on Neon (PostgreSQL)
+- **Proxy**: Vercel rewrites `/api/*` requests to Render (preserves cookies for auth)
+
+### Step-by-Step Deployment
+
+#### 1. Deploy Backend to Render
 1. Push code to GitHub
-2. Create a Neon database at [neon.tech](https://neon.tech)
-3. Import project on [vercel.com](https://vercel.com)
-4. Add `DATABASE_URL`, `NEXTAUTH_SECRET`, and `NEXTAUTH_URL` in the Vercel dashboard
-5. Run `prisma migrate deploy` against the production database
-6. Seed the production database if needed with `npx prisma db seed`
-7. Deploy — Vercel auto-builds on push
- - Create a Neon database at [neon.tech](https://neon.tech)
- - Import the frontend project on [vercel.com](https://vercel.com)
- - If you host the backend separately (recommended):
-	 - Deploy the backend on Render using the included `render.yaml` (backend will run migrations during build)
-	 - Set `NEXT_PUBLIC_API_URL` in the Vercel frontend environment to the Render service URL (e.g. `https://college-finder-backend.onrender.com`)
- - Add `DATABASE_URL`, `NEXTAUTH_SECRET`, and `NEXTAUTH_URL` (for dev) in the respective platform environment settings
- - Run `prisma migrate deploy` against the production database (the Render build does this automatically when using `render.yaml`)
- - Seed the production database if needed with `npx prisma db seed` or call the `/api/seed` endpoint
- - Deploy — Vercel/Render auto-build on push
+2. Go to [render.com](https://render.com) → New Web Service
+3. Connect GitHub repo (`Kevinbastin/college_finder`)
+4. Configure:
+   - **Name**: `college-finder-backend`
+   - **Branch**: `main`
+   - **Runtime**: Node
+   - **Build Command**: `npx prisma migrate deploy && npx prisma generate && npm run build`
+   - **Start Command**: `npm run start`
+5. Add Environment Variables:
+   - `DATABASE_URL` = your Neon connection string
+   - `NEXTAUTH_SECRET` = random 32+ char secret
+   - `NEXTAUTH_URL` = your Vercel frontend URL (once deployed)
+   - `NODE_ENV` = `production`
+6. Deploy (green ✓ when ready)
 
-## 📊 Database
+#### 2. Seed Production Database
+After Render deployment succeeds:
+```bash
+curl https://college-finder-z9dq.onrender.com/api/seed
+```
+Expected response: `{"success":true,"message":"Seeded 60 colleges!"}`
 
-- **60 realistic Indian colleges** across 12 states
-- 8 IITs, 6 NITs, 4 IIMs, 6 Private Engineering, 4 Private Management, 6 State Universities, 8 Private Deemed, 6 Medical, 6 Law/Arts, 6 Newer Private
-- Full data: fees, placements, cutoff ranks, courses, contact info
+#### 3. Deploy Frontend to Vercel
+1. Go to [vercel.com](https://vercel.com) → Add New → Project
+2. Import your GitHub repo
+3. Configure:
+   - **Framework**: Next.js
+   - **Build Command**: `npx prisma generate && next build` (migrations run on Render)
+4. Add Environment Variables:
+   - `NEXTAUTH_URL` = `https://college-finder-henna.vercel.app` (or your domain)
+   - `NEXTAUTH_SECRET` = same value as Render
+5. Deploy (auto-deploys on git push afterward)
+
+#### 4. Enable API Proxy (optional but recommended)
+Vercel automatically rewrites `/api/*` to Render (via `vercel.json`). No additional config needed.
+
+## 📊 Database Schema
+
+### Tables
+- **College**: 60 institutions with full metadata (fees, placements, rankings)
+- **User**: Registered users (email, hashed password)
+- **SavedCollege**: User bookmarks (many-to-many with College)
+- **SavedComparison**: User comparison sets (multiple colleges per comparison)
+- **Question**: Per-college community questions
+- **Answer**: Answers to questions (many-to-one with Question)
+
+### Sample College Data
+- **60 colleges** across 12 states
+- Distribution: 8 IITs, 6 NITs, 4 IIMs, 6 Private Engineering, 4 Private Management, 6 State Universities, 8 Private Deemed, 6 Medical, 6 Law/Arts, 6 Newer Private
+- Data includes: fees, placement rates, avg/highest packages, cutoff ranks by exam, courses, contacts, NAAC grades
 
 ---
 
-Built with ❤️ for students across India
+## 🧪 Testing Features
+
+```bash
+# Test locally
+npm run dev
+
+# Login credentials (use the register page to create an account)
+# After registration, you can:
+# - Browse /colleges
+# - Click a college to view details
+# - Save colleges to your list
+# - Compare colleges
+# - Ask/answer questions
+# - Use the predictor
+```
+
+---
+
+## 📖 Documentation
+
+- [Deployment Guide](./DEPLOY_RENDER.md) — Detailed Render + Vercel setup
+- API Routes documented in `src/app/api/`
+
+---
+
+## 🤝 Contributing
+
+Feel free to fork, modify, and use this as a template for your college discovery projects.
+
+---
+
+## ⚡ Performance Notes
+
+- **Cold starts**: Render free tier spins down after 15 min inactivity (first request ~30s). Upgrade to Starter ($7/mo) for always-on.
+- **Neon free tier**: Suitable for small projects. Upgrade if you exceed limits.
+- **Vercel**: Unlimited builds on free tier; auto-deployments on git push.
+
+---
+
+Built with ❤️ for students across India making informed college choices.
